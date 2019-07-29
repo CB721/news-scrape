@@ -22,6 +22,17 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
+// mongo/mongoose connection
+// use either deployed db or localhost db
+var db = process.env.MONGODB_URI || "mongodb://localhost:8080/newsScrape";
+mongoose.connect(db, function(error) {
+    if (error) {
+        return error;
+    } else {
+        console.log("connected with mongoose");
+    }
+})
+
 // routing
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
