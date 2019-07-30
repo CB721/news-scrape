@@ -16,10 +16,9 @@ var ArticleSchema = new Schema({
     type: String,
     required: true
   },
-  // User note about article
-  note: {
-    type: Schema.Types.ObjectId,
-    ref: "Note"
+  // Author
+  author: {
+    type: String,
   },
   // Summary of the article
   summary: {
@@ -32,6 +31,11 @@ var ArticleSchema = new Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  // User note about article
+  note: {
+    type: Schema.Types.ObjectId,
+    ref: "Note"
   }
 });
 

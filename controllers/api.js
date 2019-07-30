@@ -1,14 +1,35 @@
 var express = require("express");
 var router = express.Router();
-var db = require("./models");
+var db = require("../models");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
 // Routes
 // Get articles
 router.get("/api/scrape", function (req, res) {
-    axios.get("#").then(function (response) {
+    axios.get("https://www.nytimes.com/").then(function (response) {
         var $ = cheerio.load(response.data);
+        // save response to empty object
+        var result = [];
+
+        // h2 that the content is in
+        $(".css-8atqhb").each(function (i, element) {
+            // set results
+            result.title = $(this).children(".esl82me0").text();
+            result.author = $(this).children("e1god9m10").text();
+            result.link = $(this).children("a").attr("href");
+            result.summary = $(this).children(".e1n8kpyg0").text();
+        })
+        // Create a new Article using the `result` object built from scraping
+        db.Article.create(result)
+            .then(function (dbArticle) {
+                // View the added result in the console
+                console.log(dbArticle);
+            })
+            .catch(function (err) {
+                // If an error occurred, log it
+                console.log(err);
+            });
         res.send("Scrape Complete");
     });
 });
